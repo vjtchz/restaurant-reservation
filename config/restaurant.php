@@ -1,5 +1,5 @@
 <?php
 
 return [
-  "capacity" => 10,
+  "tables" => 10,
 ];
