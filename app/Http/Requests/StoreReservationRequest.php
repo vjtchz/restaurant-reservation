@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreReservationRequest extends FormRequest
+{
+  /**
+   * Determine if the user is authorized to make this request.
+   */
+  public function authorize(): bool
+  {
+    return false;
+  }
+
+  /**
+   * Get the validation rules that apply to the request.
+   *
+   * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+   */
+  public function rules(): array
+  {
+    return [
+      'date' => ['required', 'date', 'after_or_equal:today'],
+
+      'time_from' => [
+        'required',
+        'date_format:H:i',
+      ],
+
+      'time_to' => [
+        'required',
+        'date_format:H:i',
+        'after:time_from',
+      ],
+
+      'guests' => [
+        'required',
+        'integer',
+        'min:1',
+      ],
+    ];
+  }
+
+  /**
+   * Get custom validation error messages.
+   *
+   * @return array<string, string>
+   */
+  public function messages(): array
+  {
+    return [
+      'time_to.after' => 'End time must be after start time.',
+    ];
+  }
+
+  /**
+   * Normalize inputs before validation.
+   */
+  protected function prepareForValidation(): void
+  {
+    $this->merge([
+      'time_from' => $this->normalizeTime($this->time_from),
+      'time_to'   => $this->normalizeTime($this->time_to),
+    ]);
+  }
+
+  /**
+   * Normalize a time string to H:i:s when only H:i is provided.
+   */
+  private function normalizeTime(?string $time): ?string
+  {
+    if ($time && strlen($time) === 5) {
+      return $time . ':00';
+    }
+
+    return $time;
+  }
+}
