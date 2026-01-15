@@ -7,6 +7,14 @@ use App\Exceptions\NoAvailableTablesException;
 
 class ReservationService
 {
+  /**
+   * Create a reservation if capacity allows.
+   *
+   * @param array $data
+   * @return Reservation
+   *
+   * @throws NoAvailableTablesException
+   */
   public function create(array $data): Reservation
   {
     $capacity = config('restaurant.tables');

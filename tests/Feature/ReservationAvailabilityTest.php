@@ -6,12 +6,17 @@ use App\Models\User;
 use App\Services\ReservationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+/**
+ * Reservation availability feature tests.
+ *
+ * Covers capacity checks for overlapping reservations.
+ */
+
 uses(RefreshDatabase::class);
 
 it('creates reservation when capacity is available', function () {
   config(['restaurant.tables' => 2]);
 
-  // 1 stůl už je obsazen v kolizi
   Reservation::factory()->create([
     'date' => '2026-02-01',
     'time_from' => '18:00',
