@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { X } from 'lucide-vue-next';
+import { computed, ref, watch } from 'vue';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
