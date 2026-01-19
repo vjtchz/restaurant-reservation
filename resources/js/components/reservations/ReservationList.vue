@@ -29,7 +29,7 @@ const props = defineProps<{
 
 const { formatReservationDate } = useReservationFormatting();
 
-const pageSize = 10;
+const pageSize = 5;
 const totalPages = computed(() =>
   Math.max(1, Math.ceil(props.reservations.length / pageSize)),
 );
