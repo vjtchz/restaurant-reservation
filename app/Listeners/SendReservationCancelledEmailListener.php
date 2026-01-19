@@ -10,5 +10,8 @@ class SendReservationCancelledEmailListener
   /**
    * @param ReservationCancelled $event
    */
-  public function handle(ReservationCancelled $event): void {}
+  public function handle(ReservationCancelled $event): void
+  {
+    SendReservationCancelledEmail::dispatchForReservation($event->reservation);
+  }
 }

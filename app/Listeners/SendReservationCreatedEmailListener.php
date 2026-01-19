@@ -10,5 +10,8 @@ class SendReservationCreatedEmailListener
   /**
    * @param ReservationCreated $event
    */
-  public function handle(ReservationCreated $event): void {}
+  public function handle(ReservationCreated $event): void
+  {
+    SendReservationCreatedEmail::dispatch($event->reservation->id);
+  }
 }
