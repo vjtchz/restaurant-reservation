@@ -54,7 +54,7 @@ class ReservationController extends Controller
         ->withInput();
     }
 
-    return redirect()->back()->with('success', 'Reservation created.');
+    return redirect()->back()->with('success', __('reservations.flash.created'));
   }
 
   /**
@@ -63,12 +63,10 @@ class ReservationController extends Controller
    * @param Reservation $reservation
    * @return \Illuminate\Http\RedirectResponse
    */
-  public function destroy(Reservation $reservation)
+  public function destroy(Reservation $reservation, ReservationService $service)
   {
-    abort_unless($reservation->user_id === auth()->id(), 403);
+    $service->delete($reservation, auth()->id());
 
-    $reservation->delete();
-
-    return back()->with('success', 'Reservation deleted.');
+    return back()->with('success', __('reservations.flash.deleted'));
   }
 }
