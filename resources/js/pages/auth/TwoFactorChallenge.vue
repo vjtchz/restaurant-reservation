@@ -13,27 +13,25 @@ import {
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { store } from '@/routes/two-factor/login';
 
-interface AuthConfigContent {
-    title: string;
-    description: string;
-    toggleText: string;
+interface AuthConfigKeys {
+    titleKey: string;
+    descriptionKey: string;
+    toggleKey: string;
 }
 
-const authConfigContent = computed<AuthConfigContent>(() => {
+const authConfigKeys = computed<AuthConfigKeys>(() => {
     if (showRecoveryInput.value) {
         return {
-            title: 'Recovery Code',
-            description:
-                'Please confirm access to your account by entering one of your emergency recovery codes.',
-            toggleText: 'login using an authentication code',
+            titleKey: 'auth.two_factor.recovery_title',
+            descriptionKey: 'auth.two_factor.recovery_description',
+            toggleKey: 'auth.two_factor.use_auth_code',
         };
     }
 
     return {
-        title: 'Authentication Code',
-        description:
-            'Enter the authentication code provided by your authenticator application.',
-        toggleText: 'login using a recovery code',
+        titleKey: 'auth.two_factor.auth_title',
+        descriptionKey: 'auth.two_factor.auth_description',
+        toggleKey: 'auth.two_factor.use_recovery_code',
     };
 });
 
@@ -50,10 +48,10 @@ const code = ref<string>('');
 
 <template>
     <AuthLayout
-        :title="authConfigContent.title"
-        :description="authConfigContent.description"
+        :title="$t(authConfigKeys.titleKey)"
+        :description="$t(authConfigKeys.descriptionKey)"
     >
-        <Head title="Two-Factor Authentication" />
+        <Head :title="$t('auth.two_factor.page_title')" />
 
         <div class="space-y-6">
             <template v-if="!showRecoveryInput">
@@ -87,17 +85,17 @@ const code = ref<string>('');
                         </div>
                         <InputError :message="errors.code" />
                     </div>
-                    <Button type="submit" class="w-full" :disabled="processing"
-                        >Continue</Button
-                    >
+                    <Button type="submit" class="w-full" :disabled="processing">
+                        {{ $t('auth.two_factor.continue') }}
+                    </Button>
                     <div class="text-center text-sm text-muted-foreground">
-                        <span>or you can </span>
+                        <span>{{ $t('auth.two_factor.or_you_can') }}</span>
                         <button
                             type="button"
                             class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                             @click="() => toggleRecoveryMode(clearErrors)"
                         >
-                            {{ authConfigContent.toggleText }}
+                            {{ $t(authConfigKeys.toggleKey) }}
                         </button>
                     </div>
                 </Form>
@@ -113,23 +111,23 @@ const code = ref<string>('');
                     <Input
                         name="recovery_code"
                         type="text"
-                        placeholder="Enter recovery code"
+                        :placeholder="$t('auth.two_factor.recovery_placeholder')"
                         :autofocus="showRecoveryInput"
                         required
                     />
                     <InputError :message="errors.recovery_code" />
-                    <Button type="submit" class="w-full" :disabled="processing"
-                        >Continue</Button
-                    >
+                    <Button type="submit" class="w-full" :disabled="processing">
+                        {{ $t('auth.two_factor.continue') }}
+                    </Button>
 
                     <div class="text-center text-sm text-muted-foreground">
-                        <span>or you can </span>
+                        <span>{{ $t('auth.two_factor.or_you_can') }}</span>
                         <button
                             type="button"
                             class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                             @click="() => toggleRecoveryMode(clearErrors)"
                         >
-                            {{ authConfigContent.toggleText }}
+                            {{ $t(authConfigKeys.toggleKey) }}
                         </button>
                     </div>
                 </Form>

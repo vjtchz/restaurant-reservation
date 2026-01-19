@@ -10,6 +10,7 @@ return [
   ],
   'validation' => [
     'time_to_after' => 'End time must be after start time.',
+    'time_to_min_duration' => 'End time must be at least :minutes minutes after start time.',
   ],
   'mail' => [
     'created' => [

@@ -10,7 +10,7 @@ import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
-        title: 'Appearance settings',
+        title: 'settings.appearance.breadcrumb',
         href: edit().url,
     },
 ];
@@ -18,15 +18,15 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
-        <Head title="Appearance settings" />
+        <Head :title="$t('settings.appearance.page_title')" />
 
-        <h1 class="sr-only">Appearance Settings</h1>
+        <h1 class="sr-only">{{ $t('settings.appearance.sr_title') }}</h1>
 
         <SettingsLayout>
             <div class="space-y-6">
                 <HeadingSmall
-                    title="Appearance settings"
-                    description="Update your account's appearance settings"
+                    :title="$t('settings.appearance.title')"
+                    :description="$t('settings.appearance.description')"
                 />
                 <AppearanceTabs />
             </div>

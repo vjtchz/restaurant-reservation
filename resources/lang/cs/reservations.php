@@ -10,6 +10,7 @@ return [
   ],
   'validation' => [
     'time_to_after' => 'Čas ukončení musí být po začátku.',
+    'time_to_min_duration' => 'Čas ukončení musí být alespoň o :minutes minut po začátku.',
   ],
   'mail' => [
     'created' => [

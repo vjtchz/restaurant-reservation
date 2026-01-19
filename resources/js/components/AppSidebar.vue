@@ -21,7 +21,7 @@ import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Reservations',
+        title: 'app.sidebar.reservations',
         href: reservationsIndex(),
         icon: LayoutGrid,
     },
@@ -29,12 +29,12 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Github Repo',
+        title: 'app.sidebar.github_repo',
         href: 'https://github.com/vjtchz/restaurant-reservation',
         icon: Folder,
     },
     {
-        title: 'Documentation',
+        title: 'app.sidebar.documentation',
         href: 'https://github.com/vjtchz/restaurant-reservation/blob/main/README.md',
         icon: BookOpen,
     },

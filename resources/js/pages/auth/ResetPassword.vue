@@ -20,10 +20,10 @@ const inputEmail = ref(props.email);
 
 <template>
     <AuthLayout
-        title="Reset password"
-        description="Please enter your new password below"
+        :title="$t('auth.reset.title')"
+        :description="$t('auth.reset.description')"
     >
-        <Head title="Reset password" />
+        <Head :title="$t('auth.reset.page_title')" />
 
         <Form
             v-bind="update.form()"
@@ -33,7 +33,7 @@ const inputEmail = ref(props.email);
         >
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="email">Email</Label>
+                    <Label for="email">{{ $t('auth.reset.email_label') }}</Label>
                     <Input
                         id="email"
                         type="email"
@@ -47,7 +47,7 @@ const inputEmail = ref(props.email);
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password">Password</Label>
+                    <Label for="password">{{ $t('auth.reset.password_label') }}</Label>
                     <Input
                         id="password"
                         type="password"
@@ -55,14 +55,14 @@ const inputEmail = ref(props.email);
                         autocomplete="new-password"
                         class="mt-1 block w-full"
                         autofocus
-                        placeholder="Password"
+                        :placeholder="$t('auth.placeholders.password')"
                     />
                     <InputError :message="errors.password" />
                 </div>
 
                 <div class="grid gap-2">
                     <Label for="password_confirmation">
-                        Confirm Password
+                        {{ $t('auth.reset.password_confirmation_label') }}
                     </Label>
                     <Input
                         id="password_confirmation"
@@ -70,7 +70,7 @@ const inputEmail = ref(props.email);
                         name="password_confirmation"
                         autocomplete="new-password"
                         class="mt-1 block w-full"
-                        placeholder="Confirm password"
+                        :placeholder="$t('auth.placeholders.password_confirmation')"
                     />
                     <InputError :message="errors.password_confirmation" />
                 </div>
@@ -82,7 +82,7 @@ const inputEmail = ref(props.email);
                     data-test="reset-password-button"
                 >
                     <Spinner v-if="processing" />
-                    Reset password
+                    {{ $t('auth.reset.submit') }}
                 </Button>
             </div>
         </Form>

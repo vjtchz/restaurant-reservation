@@ -14,19 +14,19 @@ import { type NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [
     {
-        title: 'Profile',
+        title: 'settings.nav.profile',
         href: editProfile(),
     },
     {
-        title: 'Password',
+        title: 'settings.nav.password',
         href: editPassword(),
     },
     {
-        title: 'Two-Factor Auth',
+        title: 'settings.nav.two_factor',
         href: show(),
     },
     {
-        title: 'Appearance',
+        title: 'settings.nav.appearance',
         href: editAppearance(),
     },
 ];
@@ -37,15 +37,15 @@ const { urlIsActive } = useActiveUrl();
 <template>
     <div class="px-4 py-6">
         <Heading
-            title="Settings"
-            description="Manage your profile and account settings"
+            :title="$t('settings.title')"
+            :description="$t('settings.description')"
         />
 
         <div class="flex flex-col lg:flex-row lg:space-x-12">
             <aside class="w-full max-w-xl lg:w-48">
                 <nav
                     class="flex flex-col space-y-1 space-x-0"
-                    aria-label="Settings"
+                    :aria-label="$t('settings.aria_label')"
                 >
                     <Button
                         v-for="item in sidebarNavItems"
@@ -59,7 +59,7 @@ const { urlIsActive } = useActiveUrl();
                     >
                         <Link :href="item.href">
                             <component :is="item.icon" class="h-4 w-4" />
-                            {{ item.title }}
+                            {{ $t(item.title) }}
                         </Link>
                     </Button>
                 </nav>

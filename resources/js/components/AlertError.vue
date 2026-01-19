@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { wTrans } from 'laravel-vue-i18n';
 import { AlertCircle } from 'lucide-vue-next';
 import { computed } from 'vue';
 
@@ -9,17 +10,18 @@ interface Props {
     title?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    title: 'Something went wrong.',
-});
+const props = defineProps<Props>();
 
 const uniqueErrors = computed(() => Array.from(new Set(props.errors)));
+const titleText = computed(
+    () => props.title ?? wTrans('app.errors.title').value,
+);
 </script>
 
 <template>
     <Alert variant="destructive">
         <AlertCircle class="size-4" />
-        <AlertTitle>{{ title }}</AlertTitle>
+        <AlertTitle>{{ titleText }}</AlertTitle>
         <AlertDescription>
             <ul class="list-inside list-disc text-sm">
                 <li v-for="(error, index) in uniqueErrors" :key="index">
