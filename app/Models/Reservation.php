@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,6 +35,15 @@ class Reservation extends Model
   ];
 
   /**
+   * Computed attributes to append to array/json output.
+   *
+   * @var array<int, string>
+   */
+  protected $appends = [
+    'time_range',
+  ];
+
+  /**
    * Reservation owner.
    *
    * @return BelongsTo
@@ -50,7 +60,10 @@ class Reservation extends Model
    */
   public function getTimeRangeAttribute(): string
   {
-    return "{$this->time_from}–{$this->time_to}";
+    $from = Carbon::parse($this->time_from)->format('H:i');
+    $to = Carbon::parse($this->time_to)->format('H:i');
+
+    return "{$from}–{$to}";
   }
 
   /**
