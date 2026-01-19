@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreReservationRequest extends FormRequest
@@ -21,6 +23,8 @@ class StoreReservationRequest extends FormRequest
    */
   public function rules(): array
   {
+    $minDuration = (int) config('restaurant.min_duration', 60);
+
     return [
       'date' => ['required', 'date', 'after_or_equal:today'],
 
@@ -33,6 +37,25 @@ class StoreReservationRequest extends FormRequest
         'required',
         'date_format:H:i',
         'after:time_from',
+        function (string $attribute, mixed $value, Closure $fail) use ($minDuration): void {
+          $timeFrom = $this->input('time_from');
+          if (!$timeFrom) {
+            return;
+          }
+
+          try {
+            $from = Carbon::createFromFormat('H:i', $timeFrom);
+            $to = Carbon::createFromFormat('H:i', (string) $value);
+          } catch (\Throwable) {
+            return;
+          }
+
+          if ($to->lt($from->copy()->addMinutes($minDuration))) {
+            $fail(__('reservations.validation.time_to_min_duration', [
+              'minutes' => $minDuration,
+            ]));
+          }
+        },
       ],
 
       'guests' => [

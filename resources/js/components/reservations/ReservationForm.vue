@@ -18,13 +18,9 @@ const emit = defineEmits<{
 }>();
 
 const page = usePage();
-const {
-  addMinutesToTime,
-  formatDateForInput,
-} = useReservationFormatting();
+const { formatDateForInput } = useReservationFormatting();
 const errors = computed(() => page.props.errors ?? {});
 const slotMinutes = 30;
-const minDurationMinutes = 60;
 const timeSlots = Array.from({ length: 48 }, (_, index) => {
   const totalMinutes = index * slotMinutes;
   const hours = Math.floor(totalMinutes / 60)
@@ -45,14 +41,6 @@ const getDefaultForm = () => ({
 const form = reactive(getDefaultForm());
 
 const maxGuests = computed(() => props.maxGuests ?? 10);
-
-const minTimeTo = computed(() => {
-  if (!form.time_from) {
-    return '';
-  }
-
-  return addMinutesToTime(form.time_from, minDurationMinutes);
-});
 
 const summary = computed(() => {
   if (!form.date || !form.time_from || !form.time_to) {
@@ -116,17 +104,6 @@ const createReservation = () => {
   });
 };
 
-watch(() => form.time_from, (value) => {
-  if (!value) {
-    return;
-  }
-
-  const nextTimeTo = addMinutesToTime(value, minDurationMinutes);
-  if (!form.time_to || form.time_to < nextTimeTo) {
-    form.time_to = nextTimeTo;
-  }
-});
-
 watch(
   () => [form.date, form.time_from, form.time_to],
   () => {
@@ -181,7 +158,7 @@ watch(
 </script>
 
 <template>
-  <form class="grid gap-4" @submit.prevent="createReservation">
+  <form class="grid gap-4" novalidate @submit.prevent="createReservation">
     <div class="grid gap-2">
       <Label for="reservation-date">
         {{ $t('reservations.ui.form.labels.date') }}
@@ -220,13 +197,9 @@ watch(
         v-model="form.time_to"
         type="time"
         step="900"
-        :min="minTimeTo"
         list="reservation-time-options"
         required
       />
-      <p class="text-xs text-muted-foreground">
-        {{ $t('reservations.ui.form.min_duration', { minutes: minDurationMinutes }) }}
-      </p>
       <InputError :message="errors.time_to" />
     </div>
 
