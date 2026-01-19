@@ -2,7 +2,6 @@
 import { Head, usePage } from '@inertiajs/vue3';
 import { ChevronDown } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 import ReservationForm from '@/components/reservations/ReservationForm.vue';
 import ReservationList from '@/components/reservations/ReservationList.vue';
@@ -23,10 +22,9 @@ import { index } from '@/routes/reservations';
 import { type BreadcrumbItem } from '@/types';
 
 const page = usePage();
-const { t } = useI18n();
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: t('reservations.ui.page_title'),
+    title: 'reservations.ui.page_title',
     href: index().url,
   },
 ];
@@ -49,7 +47,7 @@ const handleReservationCreated = () => {
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbs">
-    <Head :title="t('reservations.ui.page_title')" />
+    <Head :title="$t('reservations.ui.page_title')" />
 
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
       <div class="flex flex-col gap-6">
@@ -59,10 +57,10 @@ const handleReservationCreated = () => {
               <CollapsibleTrigger class="flex w-full items-center justify-between text-left">
                 <div>
                   <CardTitle>
-                    {{ t('reservations.ui.form.title') }}
+                    {{ $t('reservations.ui.form.title') }}
                   </CardTitle>
                   <CardDescription>
-                    {{ t('reservations.ui.form.description') }}
+                    {{ $t('reservations.ui.form.description') }}
                   </CardDescription>
                 </div>
                 <ChevronDown

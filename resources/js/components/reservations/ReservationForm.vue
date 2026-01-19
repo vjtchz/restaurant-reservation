@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { router, usePage } from '@inertiajs/vue3';
+import { wTrans } from 'laravel-vue-i18n';
 import { computed, reactive, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,6 @@ const emit = defineEmits<{
 }>();
 
 const page = usePage();
-const { t } = useI18n();
 const {
   addMinutesToTime,
   formatDateForInput,
@@ -57,19 +56,19 @@ const minTimeTo = computed(() => {
 
 const summary = computed(() => {
   if (!form.date || !form.time_from || !form.time_to) {
-    return t('reservations.ui.form.summary_empty');
+    return wTrans('reservations.ui.form.summary_empty').value;
   }
 
   const key = form.guests === 1
     ? 'reservations.ui.form.summary_single'
     : 'reservations.ui.form.summary_plural';
 
-  return t(key, {
+  return wTrans(key, {
     date: form.date,
     from: form.time_from,
     to: form.time_to,
     guests: form.guests,
-  });
+  }).value;
 });
 
 const availability = reactive({
@@ -81,7 +80,7 @@ const availabilityTimer = ref<number | null>(null);
 
 const availabilityMessage = computed(() => {
   if (availability.status === 'checking') {
-    return t('reservations.ui.form.availability.checking');
+    return wTrans('reservations.ui.form.availability.checking').value;
   }
 
   if (availability.status === 'available') {
@@ -89,15 +88,15 @@ const availabilityMessage = computed(() => {
       ? 'reservations.ui.form.availability.available_single'
       : 'reservations.ui.form.availability.available';
 
-    return t(key, { count: availability.remaining ?? 0 });
+    return wTrans(key, { count: availability.remaining ?? 0 }).value;
   }
 
   if (availability.status === 'full') {
-    return t('reservations.ui.form.availability.full');
+    return wTrans('reservations.ui.form.availability.full').value;
   }
 
   if (availability.status === 'error') {
-    return t('reservations.ui.form.availability.error');
+    return wTrans('reservations.ui.form.availability.error').value;
   }
 
   return '';
@@ -185,7 +184,7 @@ watch(
   <form class="grid gap-4" @submit.prevent="createReservation">
     <div class="grid gap-2">
       <Label for="reservation-date">
-        {{ t('reservations.ui.form.labels.date') }}
+        {{ $t('reservations.ui.form.labels.date') }}
       </Label>
       <Input
         id="reservation-date"
@@ -199,7 +198,7 @@ watch(
 
     <div class="grid gap-2">
       <Label for="reservation-time-from">
-        {{ t('reservations.ui.form.labels.start_time') }}
+        {{ $t('reservations.ui.form.labels.start_time') }}
       </Label>
       <Input
         id="reservation-time-from"
@@ -214,7 +213,7 @@ watch(
 
     <div class="grid gap-2">
       <Label for="reservation-time-to">
-        {{ t('reservations.ui.form.labels.end_time') }}
+        {{ $t('reservations.ui.form.labels.end_time') }}
       </Label>
       <Input
         id="reservation-time-to"
@@ -226,14 +225,14 @@ watch(
         required
       />
       <p class="text-xs text-muted-foreground">
-        {{ t('reservations.ui.form.min_duration', { minutes: minDurationMinutes }) }}
+        {{ $t('reservations.ui.form.min_duration', { minutes: minDurationMinutes }) }}
       </p>
       <InputError :message="errors.time_to" />
     </div>
 
     <div class="grid gap-2">
       <Label for="reservation-guests">
-        {{ t('reservations.ui.form.labels.guests') }}
+        {{ $t('reservations.ui.form.labels.guests') }}
       </Label>
       <Input
         id="reservation-guests"
@@ -244,7 +243,7 @@ watch(
         required
       />
       <p class="text-xs text-muted-foreground">
-        {{ t('reservations.ui.form.guests_hint', { max: maxGuests }) }}
+        {{ $t('reservations.ui.form.guests_hint', { max: maxGuests }) }}
       </p>
       <InputError :message="errors.guests" />
     </div>
@@ -263,7 +262,7 @@ watch(
 
     <div class="flex justify-end">
       <Button type="submit">
-        {{ t('reservations.ui.form.submit') }}
+        {{ $t('reservations.ui.form.submit') }}
       </Button>
     </div>
   </form>

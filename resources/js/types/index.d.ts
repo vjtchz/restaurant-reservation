@@ -22,6 +22,8 @@ export type AppPageProps<
 > = T & {
     name: string;
     auth: Auth;
+    locale?: string;
+    locales?: string[];
     sidebarOpen: boolean;
     [key: string]: unknown;
 };

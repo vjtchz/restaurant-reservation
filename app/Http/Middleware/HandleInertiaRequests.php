@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -46,31 +45,9 @@ class HandleInertiaRequests extends Middleware
         'success' => $request->session()->get('success'),
         'error' => $request->session()->get('error'),
       ],
-      'i18n' => [
-        'reservations' => [
-          'ui' => $this->normalizeVueI18nTokens(Lang::get('reservations.ui')),
-        ],
-      ],
+      'locale' => app()->getLocale(),
+      'locales' => config('app.locales', [config('app.locale')]),
       'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
     ];
-  }
-
-  /**
-   * Convert Laravel-style :tokens to vue-i18n {tokens}.
-   *
-   * @param mixed $value
-   * @return mixed
-   */
-  private function normalizeVueI18nTokens(mixed $value): mixed
-  {
-    if (is_array($value)) {
-      return array_map(fn ($item) => $this->normalizeVueI18nTokens($item), $value);
-    }
-
-    if (is_string($value)) {
-      return preg_replace('/\:([A-Za-z0-9_]+)/', '{$1}', $value);
-    }
-
-    return $value;
   }
 }

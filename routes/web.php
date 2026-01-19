@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\ReservationController;
@@ -8,6 +9,19 @@ use App\Http\Controllers\ReservationController;
 Route::get('/', function () {
   return redirect()->route('reservations.index');
 })->name('home');
+
+Route::post('locale', function (Request $request) {
+  $locales = config('app.locales', [config('app.locale')]);
+  $locale = $request->string('locale')->toString();
+
+  if (! in_array($locale, $locales, true)) {
+    abort(404);
+  }
+
+  $request->session()->put('locale', $locale);
+
+  return back();
+})->name('locale.update');
 
 Route::get('dashboard', function () {
   return redirect()->route('reservations.index');

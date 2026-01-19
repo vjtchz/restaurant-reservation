@@ -1,10 +1,11 @@
 import '../css/app.css';
 
-import { createInertiaApp } from '@inertiajs/vue3';
+import type { Page } from '@inertiajs/core';
+import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { i18nVue, loadLanguageAsync } from 'laravel-vue-i18n';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
-import { createI18n } from 'vue-i18n';
 
 import { initializeTheme } from './composables/useAppearance';
 
@@ -17,22 +18,51 @@ createInertiaApp({
             `./pages/${name}.vue`,
             import.meta.glob<DefineComponent>('./pages/**/*.vue'),
         ),
-    setup({ el, App, props, plugin }) {
-        const locale = document.documentElement.lang || 'en';
-        const messages = {
-            [locale]: (props.initialPage.props.i18n ?? {}) as Record<string, unknown>,
-        };
-        const i18n = createI18n({
-            legacy: false,
-            locale,
-            fallbackLocale: 'en',
-            messages,
-        });
+    async setup({ el, App, props, plugin }) {
+        const locale =
+            (props.initialPage.props.locale as string | undefined) ||
+            document.documentElement.lang ||
+            'en';
+        const loaders = import.meta.glob('../../lang/*.json', { eager: true });
+        const resolve = (lang: string) => {
+            const key = `../../lang/${lang}.json`;
+            const entry = loaders[key] as Record<string, unknown> | undefined;
+            if (entry) {
+                return 'default' in entry ? entry.default : entry;
+            }
 
-        createApp({ render: () => h(App, props) })
+            const short = lang.split(/[-_]/)[0];
+            const shortKey = `../../lang/${short}.json`;
+            const shortEntry = loaders[shortKey] as Record<string, unknown> | undefined;
+            if (shortEntry) {
+                return 'default' in shortEntry ? shortEntry.default : shortEntry;
+            }
+
+            return {};
+        };
+
+        const syncLocale = (page: Page) => {
+            const nextLocale =
+                (page.props.locale as string | undefined) || locale;
+            void loadLanguageAsync(nextLocale);
+        };
+
+        const app = createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(i18n)
-            .mount(el);
+            .use(i18nVue, {
+                lang: locale,
+                fallbackLang: 'en',
+                resolve,
+            });
+
+        await loadLanguageAsync(locale);
+
+        app.mount(el);
+
+        syncLocale(props.initialPage);
+        router.on('success', (event) => {
+            syncLocale(event.detail.page);
+        });
     },
     progress: {
         color: '#4B5563',

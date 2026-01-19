@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
+import { wTrans } from 'laravel-vue-i18n';
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -27,7 +27,6 @@ const props = defineProps<{
   reservations: Reservation[];
 }>();
 
-const { t } = useI18n();
 const { formatReservationDate } = useReservationFormatting();
 
 const pageSize = 10;
@@ -47,7 +46,7 @@ const pagedReservations = computed(() => {
 });
 
 const deleteReservation = (reservationId: number) => {
-  const confirmMessage = t('reservations.ui.list.confirm_cancel');
+  const confirmMessage = wTrans('reservations.ui.list.confirm_cancel').value;
 
   if (!window.confirm(confirmMessage)) {
     return;
@@ -67,27 +66,27 @@ const goNext = () => {
   }
 };
 
-const pageLabel = computed(() => t(
+const pageLabel = computed(() => wTrans(
   'reservations.ui.list.page',
   { current: safeCurrentPage.value, total: totalPages.value },
-));
+).value);
 
-const guestsLabel = (count: number) => t(
+const guestsLabel = (count: number) => wTrans(
   'reservations.ui.list.guests',
   { count },
-);
+).value;
 </script>
 
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle>
-        {{ t('reservations.ui.list.title') }}
-      </CardTitle>
-      <CardDescription>
-        {{ t('reservations.ui.list.description') }}
-      </CardDescription>
-    </CardHeader>
+    <Card>
+        <CardHeader>
+            <CardTitle>
+                {{ $t('reservations.ui.list.title') }}
+            </CardTitle>
+            <CardDescription>
+                {{ $t('reservations.ui.list.description') }}
+            </CardDescription>
+        </CardHeader>
     <CardContent class="space-y-4">
       <div v-if="pagedReservations.length" class="grid gap-3">
         <Card
@@ -111,7 +110,7 @@ const guestsLabel = (count: number) => t(
               type="button"
               @click="deleteReservation(reservation.id)"
             >
-              {{ t('reservations.ui.list.delete') }}
+              {{ $t('reservations.ui.list.delete') }}
             </Button>
           </CardContent>
         </Card>
@@ -127,7 +126,7 @@ const guestsLabel = (count: number) => t(
             :disabled="safeCurrentPage === 1"
             @click="goPrev"
           >
-            {{ t('reservations.ui.list.prev') }}
+            {{ $t('reservations.ui.list.prev') }}
           </Button>
           <span>{{ pageLabel }}</span>
           <Button
@@ -137,13 +136,13 @@ const guestsLabel = (count: number) => t(
             :disabled="safeCurrentPage === totalPages"
             @click="goNext"
           >
-            {{ t('reservations.ui.list.next') }}
+            {{ $t('reservations.ui.list.next') }}
           </Button>
         </div>
       </div>
 
       <p v-else class="text-sm text-muted-foreground">
-        {{ t('reservations.ui.list.empty') }}
+        {{ $t('reservations.ui.list.empty') }}
       </p>
     </CardContent>
   </Card>
