@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Services\ReservationService;
 use App\Http\Requests\StoreReservationRequest;
+use App\Exceptions\NoAvailableTablesException;
 
 /**
  * Handle reservation CRUD for the authenticated user.
@@ -27,7 +28,7 @@ class ReservationController extends Controller
       ->orderBy('time_from')
       ->get();
 
-    return Inertia::render('Reservations/Index', [
+    return Inertia::render('reservations/Index', [
       'reservations' => $reservations,
     ]);
   }
@@ -41,9 +42,18 @@ class ReservationController extends Controller
    */
   public function store(StoreReservationRequest $request, ReservationService $service)
   {
-    $service->create($request->validated());
+    try {
+      $data = $request->validated();
+      $data['user_id'] = $request->user()->id;
 
-    return redirect()->back();
+      $service->create($data);
+    } catch (NoAvailableTablesException $exception) {
+      return back()
+        ->withErrors(['time_from' => $exception->getMessage()])
+        ->withInput();
+    }
+
+    return redirect()->back()->with('success', 'Reservation created.');
   }
 
   /**

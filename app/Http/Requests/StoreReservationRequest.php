@@ -11,7 +11,7 @@ class StoreReservationRequest extends FormRequest
    */
   public function authorize(): bool
   {
-    return false;
+    return $this->user() !== null;
   }
 
   /**
@@ -60,21 +60,5 @@ class StoreReservationRequest extends FormRequest
    */
   protected function prepareForValidation(): void
   {
-    $this->merge([
-      'time_from' => $this->normalizeTime($this->time_from),
-      'time_to'   => $this->normalizeTime($this->time_to),
-    ]);
-  }
-
-  /**
-   * Normalize a time string to H:i:s when only H:i is provided.
-   */
-  private function normalizeTime(?string $time): ?string
-  {
-    if ($time && strlen($time) === 5) {
-      return $time . ':00';
-    }
-
-    return $time;
   }
 }
