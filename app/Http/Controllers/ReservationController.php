@@ -30,6 +30,7 @@ class ReservationController extends Controller
 
     return Inertia::render('reservations/Index', [
       'reservations' => $reservations,
+      'maxGuests' => config('restaurant.max_guests', 10),
     ]);
   }
 
