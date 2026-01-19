@@ -39,6 +39,7 @@ class StoreReservationRequest extends FormRequest
         'required',
         'integer',
         'min:1',
+        'max:' . config('restaurant.max_guests', 10),
       ],
     ];
   }
@@ -51,7 +52,7 @@ class StoreReservationRequest extends FormRequest
   public function messages(): array
   {
     return [
-      'time_to.after' => 'End time must be after start time.',
+      'time_to.after' => __('reservations.validation.time_to_after'),
     ];
   }
 
