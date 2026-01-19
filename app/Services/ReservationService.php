@@ -6,8 +6,9 @@ use App\Models\Reservation;
 use App\Exceptions\NoAvailableTablesException;
 use App\Events\ReservationCreated;
 use App\Events\ReservationCancelled;
+use App\Contracts\ReservationServiceContract;
 
-class ReservationService implements ReservationServiceInterface
+class ReservationService implements ReservationServiceContract
 {
   /**
    * Create a reservation if capacity allows.

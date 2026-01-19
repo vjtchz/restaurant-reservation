@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Contracts;
 
 use App\Models\Reservation;
 use App\Exceptions\NoAvailableTablesException;
 
-interface ReservationServiceInterface
+interface ReservationServiceContract
 {
   /**
    * Create a reservation if capacity allows.

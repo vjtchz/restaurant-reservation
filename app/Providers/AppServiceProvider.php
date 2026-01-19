@@ -11,7 +11,7 @@ use Illuminate\Validation\Rules\Password;
 use App\Events\ReservationCancelled;
 use App\Events\ReservationCreated;
 use App\Services\ReservationService;
-use App\Services\ReservationServiceInterface;
+use App\Contracts\ReservationServiceContract;
 use App\Listeners\SendReservationCancelledEmailListener;
 use App\Listeners\SendReservationCreatedEmailListener;
 
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(
-            ReservationServiceInterface::class,
+            ReservationServiceContract::class,
             ReservationService::class
         );
     }
