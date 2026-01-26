@@ -29,9 +29,16 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-const reservations = computed(() => page.props.reservations ?? []);
+const reservations = computed(() => page.props.reservations ?? {
+  data: [],
+  links: [],
+  current_page: 1,
+  last_page: 1,
+  prev_page_url: null,
+  next_page_url: null,
+});
 const maxGuests = computed(() => page.props.maxGuests ?? 10);
-const hasReservations = computed(() => reservations.value.length > 0);
+const hasReservations = computed(() => reservations.value.data.length > 0);
 const manualFormOpen = ref<boolean | null>(null);
 const formOpen = computed({
   get: () => manualFormOpen.value ?? !hasReservations.value,
@@ -71,7 +78,10 @@ const handleReservationCreated = () => {
             </CardHeader>
             <CollapsibleContent>
               <CardContent>
-                <ReservationForm :max-guests="maxGuests" @created="handleReservationCreated" />
+                <ReservationForm
+                  :max-guests="maxGuests"
+                  @created="handleReservationCreated"
+                />
               </CardContent>
             </CollapsibleContent>
           </Collapsible>

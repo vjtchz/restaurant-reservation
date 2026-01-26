@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { router } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { wTrans } from 'laravel-vue-i18n';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -23,27 +23,33 @@ type Reservation = {
   guests: number;
 };
 
+type PaginationLink = {
+  url: string | null;
+  label: string;
+  active: boolean;
+};
+
 const props = defineProps<{
-  reservations: Reservation[];
+  reservations: {
+    data: Reservation[];
+    links: PaginationLink[];
+    current_page: number;
+    last_page: number;
+    prev_page_url: string | null;
+    next_page_url: string | null;
+  };
 }>();
 
 const { formatReservationDate } = useReservationFormatting();
 
-const pageSize = 5;
-const totalPages = computed(() =>
-  Math.max(1, Math.ceil(props.reservations.length / pageSize)),
-);
-const currentPage = ref(1);
-const safeCurrentPage = computed({
-  get: () => Math.min(currentPage.value, totalPages.value),
-  set: (value) => {
-    currentPage.value = value;
-  },
-});
-const pagedReservations = computed(() => {
-  const start = (safeCurrentPage.value - 1) * pageSize;
-  return props.reservations.slice(start, start + pageSize);
-});
+const reservationItems = computed(() => props.reservations.data ?? []);
+const totalPages = computed(() => Math.max(1, props.reservations.last_page ?? 1));
+const currentPage = computed(() => Math.min(
+  props.reservations.current_page ?? 1,
+  totalPages.value,
+));
+const prevLink = computed(() => props.reservations.prev_page_url ?? null);
+const nextLink = computed(() => props.reservations.next_page_url ?? null);
 
 const deleteReservation = (reservationId: number) => {
   const confirmMessage = wTrans('reservations.ui.list.confirm_cancel').value;
@@ -54,21 +60,9 @@ const deleteReservation = (reservationId: number) => {
   router.delete(destroy(reservationId), { preserveScroll: true });
 };
 
-const goPrev = () => {
-  if (safeCurrentPage.value > 1) {
-    safeCurrentPage.value -= 1;
-  }
-};
-
-const goNext = () => {
-  if (safeCurrentPage.value < totalPages.value) {
-    safeCurrentPage.value += 1;
-  }
-};
-
 const pageLabel = computed(() => wTrans(
   'reservations.ui.list.page',
-  { current: safeCurrentPage.value, total: totalPages.value },
+  { current: currentPage.value, total: totalPages.value },
 ).value);
 
 const guestsLabel = (count: number) => wTrans(
@@ -88,9 +82,9 @@ const guestsLabel = (count: number) => wTrans(
             </CardDescription>
         </CardHeader>
     <CardContent class="space-y-4">
-      <div v-if="pagedReservations.length" class="grid gap-3">
+      <div v-if="reservationItems.length" class="grid gap-3">
         <Card
-          v-for="reservation in pagedReservations"
+          v-for="reservation in reservationItems"
           :key="reservation.id"
           class="border border-border/60"
         >
@@ -120,23 +114,35 @@ const guestsLabel = (count: number) => wTrans(
           class="flex items-center justify-between text-sm text-muted-foreground"
         >
           <Button
-            type="button"
+            as-child
             variant="outline"
             size="sm"
-            :disabled="safeCurrentPage === 1"
-            @click="goPrev"
+            :disabled="!prevLink"
           >
-            {{ $t('reservations.ui.list.prev') }}
+            <Link
+              :href="prevLink ?? ''"
+              preserve-scroll
+              preserve-state
+              :class="!prevLink ? 'pointer-events-none opacity-50' : ''"
+            >
+              {{ $t('reservations.ui.list.prev') }}
+            </Link>
           </Button>
           <span>{{ pageLabel }}</span>
           <Button
-            type="button"
+            as-child
             variant="outline"
             size="sm"
-            :disabled="safeCurrentPage === totalPages"
-            @click="goNext"
+            :disabled="!nextLink"
           >
-            {{ $t('reservations.ui.list.next') }}
+            <Link
+              :href="nextLink ?? ''"
+              preserve-scroll
+              preserve-state
+              :class="!nextLink ? 'pointer-events-none opacity-50' : ''"
+            >
+              {{ $t('reservations.ui.list.next') }}
+            </Link>
           </Button>
         </div>
       </div>

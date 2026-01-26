@@ -26,7 +26,8 @@ class ReservationController extends Controller
       ->where('user_id', $request->user()->id)
       ->orderBy('date')
       ->orderBy('time_from')
-      ->get();
+      ->paginate(config('system.reservations_per_page', 3))
+      ->withQueryString();
 
     return Inertia::render('reservations/Index', [
       'reservations' => $reservations,
