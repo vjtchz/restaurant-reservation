@@ -24,6 +24,7 @@ class ReservationController extends Controller
   {
     $reservations = Reservation::query()
       ->where('user_id', $request->user()->id)
+      ->where('end_at', '>', now())
       ->orderBy('date')
       ->orderBy('time_from')
       ->paginate(config('system.reservations_per_page', 3))

@@ -32,6 +32,7 @@ class Reservation extends Model
   protected $casts = [
     'date' => 'date',
     'guests' => 'integer',
+    'end_at' => 'datetime',
   ];
 
   /**
@@ -64,6 +65,18 @@ class Reservation extends Model
     $to = Carbon::parse($this->time_to)->format('H:i');
 
     return "{$from}–{$to}";
+  }
+
+  protected static function booted(): void
+  {
+    static::saving(function (Reservation $reservation) {
+      if (!$reservation->date || !$reservation->time_to) {
+        return;
+      }
+
+      $reservation->end_at = Carbon::parse($reservation->date)
+        ->setTimeFromTimeString((string) $reservation->time_to);
+    });
   }
 
   /**
