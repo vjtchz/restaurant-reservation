@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Carbon\Carbon;
-use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\TimeFromWithinOpeningHours;
+use App\Rules\TimeToMinDuration;
+use App\Rules\TimeToWithinOpeningHours;
 
 class StoreReservationRequest extends FormRequest
 {
@@ -24,6 +25,12 @@ class StoreReservationRequest extends FormRequest
   public function rules(): array
   {
     $minDuration = (int) config('restaurant.min_duration', 60);
+    $openingHours = config('restaurant.opening_hours', [
+      'from' => '11:00',
+      'to' => '22:00',
+    ]);
+    $openingFrom = (string) ($openingHours['from'] ?? '11:00');
+    $openingTo = (string) ($openingHours['to'] ?? '22:00');
 
     return [
       'date' => ['required', 'date', 'after_or_equal:today'],
@@ -31,31 +38,15 @@ class StoreReservationRequest extends FormRequest
       'time_from' => [
         'required',
         'date_format:H:i',
+        new TimeFromWithinOpeningHours($openingFrom, $openingTo),
       ],
 
       'time_to' => [
         'required',
         'date_format:H:i',
         'after:time_from',
-        function (string $attribute, mixed $value, Closure $fail) use ($minDuration): void {
-          $timeFrom = $this->input('time_from');
-          if (!$timeFrom) {
-            return;
-          }
-
-          try {
-            $from = Carbon::createFromFormat('H:i', $timeFrom);
-            $to = Carbon::createFromFormat('H:i', (string) $value);
-          } catch (\Throwable) {
-            return;
-          }
-
-          if ($to->lt($from->copy()->addMinutes($minDuration))) {
-            $fail(__('reservations.validation.time_to_min_duration', [
-              'minutes' => $minDuration,
-            ]));
-          }
-        },
+        new TimeToWithinOpeningHours($openingFrom, $openingTo),
+        new TimeToMinDuration($minDuration, $this->input('time_from')),
       ],
 
       'guests' => [
@@ -77,12 +68,5 @@ class StoreReservationRequest extends FormRequest
     return [
       'time_to.after' => __('reservations.validation.time_to_after'),
     ];
-  }
-
-  /**
-   * Normalize inputs before validation.
-   */
-  protected function prepareForValidation(): void
-  {
   }
 }

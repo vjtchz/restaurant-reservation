@@ -32,6 +32,10 @@ class ReservationController extends Controller
     return Inertia::render('reservations/Index', [
       'reservations' => $reservations,
       'maxGuests' => config('restaurant.max_guests', 10),
+      'openingHours' => config('restaurant.opening_hours', [
+        'from' => '11:00',
+        'to' => '22:00',
+      ]),
     ]);
   }
 

@@ -8,10 +8,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useReservationFormatting } from '@/composables/useReservationFormatting';
+import { useReservationTime } from '@/composables/useReservationTime';
 import { store } from '@/routes/reservations';
 
 const props = defineProps<{
   maxGuests?: number;
+  openingHours?: {
+    from: string;
+    to: string;
+  };
 }>();
 const emit = defineEmits<{
   (event: 'created'): void;
@@ -19,22 +24,23 @@ const emit = defineEmits<{
 
 const page = usePage();
 const { formatDateForInput } = useReservationFormatting();
+const { addMinutes, buildTimeSlots } = useReservationTime();
 const errors = computed(() => page.props.errors ?? {});
 const slotMinutes = 30;
-const timeSlots = Array.from({ length: 48 }, (_, index) => {
-  const totalMinutes = index * slotMinutes;
-  const hours = Math.floor(totalMinutes / 60)
-    .toString()
-    .padStart(2, '0');
-  const minutes = (totalMinutes % 60).toString().padStart(2, '0');
+const openingHours = computed(() => props.openingHours ?? { from: '11:00', to: '22:00' });
+const openingFrom = computed(() => openingHours.value.from);
+const openingTo = computed(() => openingHours.value.to);
 
-  return `${hours}:${minutes}`;
-});
+const timeSlots = computed(() => buildTimeSlots(
+  openingFrom.value,
+  openingTo.value,
+  slotMinutes,
+));
 
 const getDefaultForm = () => ({
   date: formatDateForInput(new Date()),
-  time_from: '18:00',
-  time_to: '19:00',
+  time_from: openingFrom.value,
+  time_to: addMinutes(openingFrom.value, 60, openingTo.value),
   guests: 2,
 });
 
@@ -181,6 +187,8 @@ watch(
         id="reservation-time-from"
         v-model="form.time_from"
         type="time"
+        :min="openingFrom"
+        :max="openingTo"
         step="900"
         list="reservation-time-options"
         required
@@ -196,6 +204,8 @@ watch(
         id="reservation-time-to"
         v-model="form.time_to"
         type="time"
+        :min="form.time_from || openingFrom"
+        :max="openingTo"
         step="900"
         list="reservation-time-options"
         required
