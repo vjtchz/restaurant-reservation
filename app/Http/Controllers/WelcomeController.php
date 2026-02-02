@@ -9,7 +9,7 @@ use Inertia\Inertia;
 /**
  * Render the public home page with availability info.
  */
-class HomeController extends Controller
+class WelcomeController extends Controller
 {
   /**
    * Handle the incoming request.

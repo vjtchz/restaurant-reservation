@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Laravel\Fortify\Features;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ReservationController;
 
-Route::get('/', HomeController::class)->name('home');
+Route::get('/', WelcomeController::class)->name('home');
 
 Route::post('locale', function (Request $request) {
   $locales = config('app.locales', [config('app.locale')]);
