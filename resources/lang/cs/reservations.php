@@ -11,6 +11,7 @@ return [
   'validation' => [
     'time_to_after' => 'Čas ukončení musí být po začátku.',
     'time_to_min_duration' => 'Čas ukončení musí být alespoň o :minutes minut po začátku.',
+    'time_outside_opening_hours' => 'Čas musí být v rámci otevírací doby (:from–:to).',
   ],
   'mail' => [
     'created' => [

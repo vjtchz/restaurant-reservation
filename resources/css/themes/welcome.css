@@ -1,0 +1,75 @@
+.theme-welcome {
+    --welcome-bg: #f3ede5;
+    --welcome-ink: #1f1a16;
+    --welcome-ink-strong: #241a14;
+    --welcome-ink-hover: #2a211b;
+    --welcome-ink-muted: #5b453a;
+    --welcome-ink-soft: #6e5244;
+    --welcome-ink-warm: #7a4a2b;
+    --welcome-ink-subtle: #8b6b58;
+    --welcome-ink-light: #fdf6ef;
+    --welcome-accent: #d06b2c;
+    --welcome-accent-soft: #c06b3e;
+    --welcome-border: #e1d2c4;
+    --welcome-border-soft: #c7b6a6;
+    --welcome-border-strong: #a98b78;
+    --welcome-border-warm: #e5c8aa;
+    --welcome-card-soft: #f7efe7;
+    --welcome-card-muted: #f9f4ef;
+    --welcome-highlight-1: #ffb56b;
+    --welcome-highlight-2: #ffe3c5;
+    --welcome-shadow-soft: #c6a892;
+    --welcome-disabled: #7d6b61;
+    --welcome-font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --welcome-font-serif: 'Fraunces', ui-serif, Georgia, serif;
+}
+
+@layer components {
+    .welcome-shell {
+        @apply bg-[color:var(--welcome-bg)] font-[var(--welcome-font-sans)] text-[color:var(--welcome-ink)];
+    }
+
+    .welcome-pill {
+        @apply inline-flex items-center gap-3 rounded-full bg-white/70 px-4 py-2 text-sm font-medium text-[color:var(--welcome-ink-warm)] shadow-sm;
+    }
+
+    .welcome-dot {
+        @apply h-2.5 w-2.5 rounded-full bg-[color:var(--welcome-accent)];
+    }
+
+    .welcome-link {
+        @apply inline-flex items-center gap-2 rounded-full border border-[color:var(--welcome-border-soft)] px-4 py-2 text-sm font-medium text-[color:var(--welcome-ink-muted)] transition hover:border-[color:var(--welcome-border-strong)] hover:text-[color:var(--welcome-ink-strong)];
+    }
+
+    .welcome-link-lg {
+        @apply px-6 py-3 text-base;
+    }
+
+    .welcome-button {
+        @apply inline-flex items-center gap-3 rounded-full bg-[color:var(--welcome-ink)] px-6 py-3 text-base font-semibold text-[color:var(--welcome-ink-light)] shadow-lg shadow-[#1f1a16]/20 transition hover:-translate-y-0.5 hover:bg-[color:var(--welcome-ink-hover)];
+    }
+
+    .welcome-button:disabled {
+        @apply cursor-not-allowed bg-[color:var(--welcome-disabled)] text-[color:var(--welcome-bg)];
+    }
+
+    .welcome-card {
+        @apply rounded-3xl border border-[color:var(--welcome-border)] bg-white/90 p-6 shadow-xl shadow-[#c6a892]/20;
+    }
+
+    .welcome-card-soft {
+        @apply rounded-2xl bg-[color:var(--welcome-card-soft)] p-4;
+    }
+
+    .welcome-card-muted {
+        @apply rounded-3xl border border-[color:var(--welcome-border)] bg-[color:var(--welcome-card-muted)] p-6 sm:p-10;
+    }
+
+    .welcome-kicker {
+        @apply text-xs uppercase tracking-[0.3em] text-[color:var(--welcome-ink-subtle)];
+    }
+
+    .welcome-title {
+        @apply font-[var(--welcome-font-serif)] text-2xl text-[color:var(--welcome-ink-strong)];
+    }
+}

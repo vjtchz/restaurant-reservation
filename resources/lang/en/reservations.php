@@ -11,6 +11,7 @@ return [
   'validation' => [
     'time_to_after' => 'End time must be after start time.',
     'time_to_min_duration' => 'End time must be at least :minutes minutes after start time.',
+    'time_outside_opening_hours' => 'Time must be within opening hours (:from–:to).',
   ],
   'mail' => [
     'created' => [
