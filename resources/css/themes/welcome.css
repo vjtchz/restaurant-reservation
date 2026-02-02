@@ -46,7 +46,7 @@
     }
 
     .welcome-button {
-        @apply inline-flex items-center gap-3 rounded-full bg-[color:var(--welcome-ink)] px-6 py-3 text-base font-semibold text-[color:var(--welcome-ink-light)] shadow-lg shadow-[#1f1a16]/20 transition hover:-translate-y-0.5 hover:bg-[color:var(--welcome-ink-hover)];
+        @apply inline-flex cursor-pointer items-center gap-3 rounded-full bg-[color:var(--welcome-ink)] px-6 py-3 text-base font-semibold text-[color:var(--welcome-ink-light)] shadow-lg shadow-[#1f1a16]/20 transition hover:-translate-y-0.5 hover:bg-[color:var(--welcome-ink-hover)];
     }
 
     .welcome-button:disabled {

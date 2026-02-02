@@ -18,9 +18,17 @@ const props = defineProps<{
     from: string;
     to: string;
   };
+  submitMode?: 'create' | 'intent';
+  submitLabel?: string;
 }>();
 const emit = defineEmits<{
   (event: 'created'): void;
+  (event: 'intent', payload: {
+    date: string;
+    time_from: string;
+    time_to: string;
+    guests: number;
+  }): void;
 }>();
 
 const page = usePage();
@@ -30,6 +38,8 @@ const errors = computed(() => page.props.errors ?? {});
 const openingHours = computed(() => props.openingHours ?? { from: '11:00', to: '22:00' });
 const openingFrom = computed(() => openingHours.value.from);
 const openingTo = computed(() => openingHours.value.to);
+const timeStepMinutes = 15;
+const timeStepSeconds = timeStepMinutes * 60;
 
 
 const getDefaultForm = () => {
@@ -70,7 +80,7 @@ const minDuration = computed(() => props.minDuration ?? 60);
 const timeSlots = computed(() => buildTimeSlots(
   openingFrom.value,
   openingTo.value,
-  minDuration,
+  timeStepMinutes,
 ));
 
 
@@ -127,6 +137,11 @@ const resetForm = () => {
 };
 
 const createReservation = () => {
+  if (props.submitMode === 'intent') {
+    emit('intent', { ...form });
+    return;
+  }
+
   router.post(store(), { ...form }, {
     preserveScroll: true,
     onSuccess: () => {
@@ -226,7 +241,7 @@ watch(
         type="time"
         :min="openingFrom"
         :max="openingTo"
-        step="900"
+        :step="timeStepSeconds"
         list="reservation-time-options"
         required
       />
@@ -243,7 +258,7 @@ watch(
         type="time"
         :min="form.time_from || openingFrom"
         :max="openingTo"
-        step="900"
+        :step="timeStepSeconds"
         list="reservation-time-options"
         required
       />
@@ -281,8 +296,8 @@ watch(
     </div>
 
     <div class="flex justify-end">
-      <Button type="submit">
-        {{ $t('reservations.ui.form.submit') }}
+      <Button type="submit" class="cursor-pointer">
+        {{ submitLabel ?? $t('reservations.ui.form.submit') }}
       </Button>
     </div>
   </form>

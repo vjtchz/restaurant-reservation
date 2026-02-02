@@ -3,7 +3,6 @@ import { Head, router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 import WelcomeLayout from '@/layouts/WelcomeLayout.vue';
-import { index as reservationsIndex } from '@/routes/reservations';
 
 const props = withDefaults(
     defineProps<{
@@ -25,7 +24,7 @@ const props = withDefaults(
 const isFull = computed(() => props.availableTables === 0);
 const goToReservation = () => {
     if (isFull.value) return;
-    router.visit(reservationsIndex());
+    router.visit('/reserve');
 };
 </script>
 
