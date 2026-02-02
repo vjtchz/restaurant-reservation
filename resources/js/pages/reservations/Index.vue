@@ -38,6 +38,7 @@ const reservations = computed(() => page.props.reservations ?? {
   next_page_url: null,
 });
 const maxGuests = computed(() => page.props.maxGuests ?? 10);
+const minDuration = computed(() => page.props.minDuration ?? 60);
 const openingHours = computed(() => page.props.openingHours ?? { from: '11:00', to: '22:00' });
 const hasReservations = computed(() => reservations.value.data.length > 0);
 const manualFormOpen = ref<boolean | null>(null);
@@ -81,6 +82,7 @@ const handleReservationCreated = () => {
               <CardContent>
                 <ReservationForm
                   :max-guests="maxGuests"
+                  :min-duration="minDuration"
                   :opening-hours="openingHours"
                   @created="handleReservationCreated"
                 />

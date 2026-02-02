@@ -13,6 +13,7 @@ import { store } from '@/routes/reservations';
 
 const props = defineProps<{
   maxGuests?: number;
+  minDuration?: number;
   openingHours?: {
     from: string;
     to: string;
@@ -24,29 +25,54 @@ const emit = defineEmits<{
 
 const page = usePage();
 const { formatDateForInput } = useReservationFormatting();
-const { addMinutes, buildTimeSlots } = useReservationTime();
+const { addMinutes, buildTimeSlots, toMinutes, toTime } = useReservationTime();
 const errors = computed(() => page.props.errors ?? {});
-const slotMinutes = 30;
 const openingHours = computed(() => props.openingHours ?? { from: '11:00', to: '22:00' });
 const openingFrom = computed(() => openingHours.value.from);
 const openingTo = computed(() => openingHours.value.to);
 
-const timeSlots = computed(() => buildTimeSlots(
-  openingFrom.value,
-  openingTo.value,
-  slotMinutes,
-));
 
-const getDefaultForm = () => ({
-  date: formatDateForInput(new Date()),
-  time_from: openingFrom.value,
-  time_to: addMinutes(openingFrom.value, 60, openingTo.value),
-  guests: 2,
-});
+const getDefaultForm = () => {
+  const now = new Date();
+  const today = formatDateForInput(now);
+  const openingStart = toMinutes(openingFrom.value);
+  const openingEnd = toMinutes(openingTo.value);
+
+  let date = today;
+  let startTime = openingFrom.value;
+
+  if (openingStart !== null && openingEnd !== null) {
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    const isAfterClose = nowMinutes >= openingEnd;
+
+    if (isAfterClose) {
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+      date = formatDateForInput(tomorrow);
+    } else if (nowMinutes > openingStart) {
+      startTime = toTime(nowMinutes);
+    }
+  }
+
+  return {
+    date,
+    time_from: startTime,
+    time_to: addMinutes(startTime, 60, openingTo.value),
+    guests: 2,
+  };
+};
 
 const form = reactive(getDefaultForm());
 
 const maxGuests = computed(() => props.maxGuests ?? 10);
+const minDuration = computed(() => props.minDuration ?? 60);
+
+const timeSlots = computed(() => buildTimeSlots(
+  openingFrom.value,
+  openingTo.value,
+  minDuration,
+));
+
 
 const summary = computed(() => {
   if (!form.date || !form.time_from || !form.time_to) {
@@ -160,6 +186,17 @@ watch(
     }, 300);
   },
   { immediate: true },
+);
+
+watch(
+  () => form.time_from,
+  (value) => {
+    if (!value) {
+      return;
+    }
+
+    form.time_to = addMinutes(value, minDuration.value, openingTo.value);
+  },
 );
 </script>
 
