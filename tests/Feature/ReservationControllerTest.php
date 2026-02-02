@@ -7,6 +7,10 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+  $this->futureDate = now()->addDay()->toDateString();
+});
+
 it('redirects guest users to login', function () {
   $this->get('/reservations')->assertRedirect('/login');
 });
@@ -19,7 +23,7 @@ it('shows only authenticated user reservations', function () {
 
   Reservation::factory()->create([
     'user_id' => $userA->id,
-    'date' => '2026-02-01',
+    'date' => $this->futureDate,
     'time_from' => '18:00',
     'time_to' => '20:00',
     'guests' => 2,
@@ -27,7 +31,7 @@ it('shows only authenticated user reservations', function () {
 
   Reservation::factory()->create([
     'user_id' => $userB->id,
-    'date' => '2026-02-02',
+    'date' => now()->addDays(2)->toDateString(),
     'time_from' => '18:00',
     'time_to' => '20:00',
     'guests' => 2,
@@ -39,8 +43,8 @@ it('shows only authenticated user reservations', function () {
     ->assertInertia(fn (Assert $page) => $page
       ->component('reservations/Index')
       ->where('maxGuests', 6)
-      ->has('reservations', 1)
-      ->where('reservations.0.user_id', $userA->id)
+      ->has('reservations.data', 1)
+      ->where('reservations.data.0.user_id', $userA->id)
     );
 });
 
@@ -49,7 +53,7 @@ it('stores a reservation', function () {
 
   $this->actingAs($user)
     ->post('/reservations', [
-      'date' => '2026-02-01',
+      'date' => $this->futureDate,
       'time_from' => '18:00',
       'time_to' => '20:00',
       'guests' => 2,
@@ -58,7 +62,7 @@ it('stores a reservation', function () {
 
   $this->assertDatabaseHas('reservations', [
     'user_id' => $user->id,
-    'date' => '2026-02-01 00:00:00',
+    'date' => $this->futureDate . ' 00:00:00',
     'time_from' => '18:00',
     'time_to' => '20:00',
     'guests' => 2,
@@ -72,7 +76,7 @@ it('returns validation error when no tables are available', function () {
 
   Reservation::factory()->create([
     'user_id' => $user->id,
-    'date' => '2026-02-01',
+    'date' => $this->futureDate,
     'time_from' => '18:00',
     'time_to' => '20:00',
     'guests' => 2,
@@ -80,7 +84,7 @@ it('returns validation error when no tables are available', function () {
 
   $this->actingAs($user)
     ->post('/reservations', [
-      'date' => '2026-02-01',
+      'date' => $this->futureDate,
       'time_from' => '18:30',
       'time_to' => '19:30',
       'guests' => 2,
@@ -95,7 +99,7 @@ it('validates reservation input', function () {
 
   $this->actingAs($user)
     ->post('/reservations', [
-      'date' => '2026-02-01',
+      'date' => $this->futureDate,
       'time_from' => '20:00',
       'time_to' => '18:00', // invalid
       'guests' => 2,
@@ -140,12 +144,48 @@ it('validates guests count boundaries', function () {
     ->assertSessionHasErrors(['guests']);
 });
 
+it('validates start time within opening hours from config', function () {
+  config(['restaurant.opening_hours' => [
+    'from' => '09:00',
+    'to' => '17:00',
+  ]]);
+
+  $user = User::factory()->create();
+
+  $this->actingAs($user)
+    ->post('/reservations', [
+      'date' => now()->addDay()->toDateString(),
+      'time_from' => '08:30',
+      'time_to' => '10:00',
+      'guests' => 2,
+    ])
+    ->assertSessionHasErrors(['time_from']);
+});
+
+it('validates end time within opening hours from config', function () {
+  config(['restaurant.opening_hours' => [
+    'from' => '09:00',
+    'to' => '17:00',
+  ]]);
+
+  $user = User::factory()->create();
+
+  $this->actingAs($user)
+    ->post('/reservations', [
+      'date' => now()->addDay()->toDateString(),
+      'time_from' => '16:00',
+      'time_to' => '17:30',
+      'guests' => 2,
+    ])
+    ->assertSessionHasErrors(['time_to']);
+});
+
 it('deletes own reservation', function () {
   $user = User::factory()->create();
 
   $reservation = Reservation::factory()->create([
     'user_id' => $user->id,
-    'date' => '2026-02-01',
+    'date' => $this->futureDate,
     'time_from' => '18:00',
     'time_to' => '20:00',
     'guests' => 2,
@@ -166,7 +206,7 @@ it('forbids deleting someone elses reservation', function () {
 
   $reservation = Reservation::factory()->create([
     'user_id' => $owner->id,
-    'date' => '2026-02-01',
+    'date' => $this->futureDate,
     'time_from' => '18:00',
     'time_to' => '20:00',
     'guests' => 2,
@@ -183,13 +223,13 @@ it('returns availability when slots are open', function () {
   $user = User::factory()->create();
 
   Reservation::factory()->create([
-    'date' => '2026-02-01',
+    'date' => $this->futureDate,
     'time_from' => '18:00',
     'time_to' => '20:00',
   ]);
 
   $this->actingAs($user)
-    ->getJson('/api/reservations/availability?date=2026-02-01&time_from=18:30&time_to=19:30')
+    ->getJson("/api/reservations/availability?date={$this->futureDate}&time_from=18:30&time_to=19:30")
     ->assertOk()
     ->assertJson([
       'available' => true,
@@ -204,13 +244,13 @@ it('returns availability when slots are full', function () {
   $user = User::factory()->create();
 
   Reservation::factory()->create([
-    'date' => '2026-02-01',
+    'date' => $this->futureDate,
     'time_from' => '18:00',
     'time_to' => '20:00',
   ]);
 
   $this->actingAs($user)
-    ->getJson('/api/reservations/availability?date=2026-02-01&time_from=18:30&time_to=19:30')
+    ->getJson("/api/reservations/availability?date={$this->futureDate}&time_from=18:30&time_to=19:30")
     ->assertOk()
     ->assertJson([
       'available' => false,
@@ -223,7 +263,7 @@ it('validates availability inputs', function () {
   $user = User::factory()->create();
 
   $this->actingAs($user)
-    ->getJson('/api/reservations/availability?date=2026-02-01&time_from=20:00&time_to=18:00')
+    ->getJson("/api/reservations/availability?date={$this->futureDate}&time_from=20:00&time_to=18:00")
     ->assertStatus(422)
     ->assertJsonValidationErrors(['time_to']);
 });

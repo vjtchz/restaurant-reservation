@@ -3,7 +3,9 @@
 use App\Models\User;
 
 it('redirects home to reservations', function () {
-  $this->get('/')->assertRedirect('/reservations');
+  $this->get('/')
+    ->assertOk()
+    ->assertInertia(fn ($page) => $page->component('Welcome'));
 });
 
 it('redirects guests to login when visiting dashboard', function () {
