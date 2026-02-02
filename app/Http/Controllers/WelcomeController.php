@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reservation;
+use App\Services\ReservationService;
 use Carbon\Carbon;
 use Inertia\Inertia;
 
@@ -16,17 +16,15 @@ class WelcomeController extends Controller
    *
    * @return \Inertia\Response
    */
-  public function __invoke()
+  public function __invoke(ReservationService $service)
   {
-    $capacity = config('restaurant.tables');
     $now = Carbon::now();
     $date = $now->toDateString();
     $timeFrom = $now->format('H:i');
     $durationMinutes = 120;
-    $timeTo = $now->copy()->addMinutes($durationMinutes)->format('H:i');
+    $timeTo = $now->addMinutes($durationMinutes)->format('H:i');
 
-    $overlapping = Reservation::overlapping($date, $timeFrom, $timeTo)->count();
-    $remaining = max(0, $capacity - $overlapping);
+    $remaining = $service->remainingTables($date, $timeFrom, $timeTo);
 
     $openingHours = config('restaurant.opening_hours', [
       'from' => '11:00',

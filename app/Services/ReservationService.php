@@ -20,15 +20,7 @@ class ReservationService implements ReservationServiceContract
    */
   public function create(array $data): Reservation
   {
-    $capacity = config('restaurant.tables');
-
-    $overlapping = Reservation::overlapping(
-      $data['date'],
-      $data['time_from'],
-      $data['time_to']
-    )->count();
-
-    if ($overlapping >= $capacity) {
+    if ($this->remainingTables($data['date'], $data['time_from'], $data['time_to']) < 1) {
       throw new NoAvailableTablesException();
     }
 
@@ -36,6 +28,23 @@ class ReservationService implements ReservationServiceContract
     event(new ReservationCreated($reservation));
 
     return $reservation;
+  }
+
+  /**
+   * Get remaining tables for a given time window.
+   *
+   * @param string $date
+   * @param string $timeFrom
+   * @param string $timeTo
+   * @return int
+   */
+  public function remainingTables(string $date, string $timeFrom, string $timeTo): int
+  {
+    $capacity = config('restaurant.tables');
+
+    $overlapping = Reservation::overlapping($date, $timeFrom, $timeTo)->count();
+
+    return max(0, $capacity - $overlapping);
   }
 
   /**
