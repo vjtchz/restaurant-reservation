@@ -11,6 +11,7 @@ use App\Http\Controllers\ReservationConfirmStoreController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\LocaleUpdateController;
 
+// Public marketing + reservation start.
 Route::get('/', WelcomeController::class)->name('home');
 // Guest reservation flow (stores intent before auth).
 Route::get('reserve', ReservationRequestController::class)

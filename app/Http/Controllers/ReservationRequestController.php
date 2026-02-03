@@ -26,7 +26,7 @@ class ReservationRequestController extends Controller
 
     $remaining = $service->remainingTables($date, $timeFrom, $timeTo);
 
-    return Inertia::render('reservations/Request', [
+    return Inertia::render('public/Reservations/Request', [
       'availableTables' => $remaining,
       'openingHours' => config('restaurant.opening_hours', [
         'from' => '11:00',

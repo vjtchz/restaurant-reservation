@@ -66,10 +66,10 @@
     }
 
     .welcome-kicker {
-        @apply text-xs uppercase tracking-[0.3em] text-[color:var(--welcome-ink-subtle)];
+        @apply text-xs tracking-[0.3em] text-[color:var(--welcome-ink-subtle)] uppercase;
     }
 
     .welcome-title {
-        @apply font-[var(--welcome-font-serif)] text-2xl text-[color:var(--welcome-ink-strong)];
+        @apply text-2xl font-[var(--welcome-font-serif)] text-[color:var(--welcome-ink-strong)];
     }
 }

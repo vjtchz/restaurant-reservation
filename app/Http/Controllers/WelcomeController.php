@@ -31,7 +31,7 @@ class WelcomeController extends Controller
       'to' => '22:00',
     ]);
 
-    return Inertia::render('Welcome', [
+    return Inertia::render('public/Welcome', [
       'availableTables' => $remaining,
       'openingHours' => $openingHours,
     ]);

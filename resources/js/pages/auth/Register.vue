@@ -27,7 +27,9 @@ import { store } from '@/routes/register';
         >
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="name">{{ $t('auth.register.name_label') }}</Label>
+                    <Label for="name">{{
+                        $t('auth.register.name_label')
+                    }}</Label>
                     <Input
                         id="name"
                         type="text"
@@ -42,7 +44,9 @@ import { store } from '@/routes/register';
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="email">{{ $t('auth.register.email_label') }}</Label>
+                    <Label for="email">{{
+                        $t('auth.register.email_label')
+                    }}</Label>
                     <Input
                         id="email"
                         type="email"
@@ -56,7 +60,9 @@ import { store } from '@/routes/register';
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password">{{ $t('auth.register.password_label') }}</Label>
+                    <Label for="password">{{
+                        $t('auth.register.password_label')
+                    }}</Label>
                     <Input
                         id="password"
                         type="password"
@@ -80,7 +86,9 @@ import { store } from '@/routes/register';
                         :tabindex="4"
                         autocomplete="new-password"
                         name="password_confirmation"
-                        :placeholder="$t('auth.placeholders.password_confirmation')"
+                        :placeholder="
+                            $t('auth.placeholders.password_confirmation')
+                        "
                     />
                     <InputError :message="errors.password_confirmation" />
                 </div>
