@@ -48,23 +48,23 @@ const handleReservationCreated = () => {
         <Head :title="$t('reservations.ui.page_title')" />
 
         <main class="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 py-10">
-            <div class="welcome-card">
+            <div class="brand-card">
                 <Collapsible v-model:open="formOpen">
                     <CollapsibleTrigger
                         class="flex w-full items-start justify-between gap-4 text-left"
                     >
                         <div>
-                            <h2 class="welcome-title">
+                            <h2 class="brand-title">
                                 {{ $t('reservations.ui.form.title') }}
                             </h2>
                             <p
-                                class="mt-2 text-sm text-[color:var(--welcome-ink-muted)]"
+                                class="mt-2 text-sm text-[color:var(--brand-ink-muted)]"
                             >
                                 {{ $t('reservations.ui.form.description') }}
                             </p>
                         </div>
                         <ChevronDown
-                            class="mt-2 size-4 text-[color:var(--welcome-ink-muted)] transition-transform"
+                            class="mt-2 size-4 text-[color:var(--brand-ink-muted)] transition-transform"
                             :class="formOpen ? 'rotate-180' : ''"
                         />
                     </CollapsibleTrigger>

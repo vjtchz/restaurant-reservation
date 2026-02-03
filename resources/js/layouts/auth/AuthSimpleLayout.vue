@@ -17,7 +17,7 @@ defineProps<{
         </template>
 
         <div class="w-full max-w-sm">
-            <div class="welcome-card flex flex-col gap-8">
+            <div class="brand-card flex flex-col gap-8">
                 <div class="flex flex-col items-center gap-4">
                     <Link
                         :href="home()"
@@ -27,18 +27,18 @@ defineProps<{
                             class="mb-1 flex h-9 w-9 items-center justify-center rounded-md"
                         >
                             <AppLogoIcon
-                                class="size-9 fill-current text-[color:var(--welcome-ink)]"
+                                class="size-9 fill-current text-[color:var(--brand-ink)]"
                             />
                         </div>
                         <span class="sr-only">{{ title }}</span>
                     </Link>
                     <div class="space-y-2 text-center">
-                        <p class="welcome-kicker tracking-[0.28em]">
+                        <p class="brand-kicker tracking-[0.28em]">
                             {{ $t('welcome.brand') }}
                         </p>
-                        <h1 class="welcome-title text-2xl">{{ title }}</h1>
+                        <h1 class="brand-title text-2xl">{{ title }}</h1>
                         <p
-                            class="text-center text-sm text-[color:var(--welcome-ink-muted)]"
+                            class="text-center text-sm text-[color:var(--brand-ink-muted)]"
                         >
                             {{ description }}
                         </p>

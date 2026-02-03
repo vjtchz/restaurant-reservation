@@ -85,26 +85,26 @@ const clearIntent = () => {
             class="relative mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-14 lg:flex-row lg:items-start lg:py-24"
         >
             <section class="space-y-6 lg:w-6/12">
-                <div class="welcome-pill">
-                    <span class="welcome-dot"></span>
+                <div class="brand-pill">
+                    <span class="brand-dot"></span>
                     {{ $t('reservations.public.hero.pill') }}
                 </div>
 
                 <div class="space-y-4">
-                    <p class="welcome-kicker tracking-[0.28em]">
+                    <p class="brand-kicker tracking-[0.28em]">
                         {{ $t('reservations.public.hero.kicker') }}
                     </p>
                     <h1
-                        class="text-4xl leading-tight font-[var(--welcome-font-serif)] text-[color:var(--welcome-ink-strong)] sm:text-5xl"
+                        class="text-4xl leading-tight font-[var(--brand-font-serif)] text-[color:var(--brand-ink-strong)] sm:text-5xl"
                     >
                         {{ $t('reservations.public.hero.title') }}
                     </h1>
                     <p
-                        class="max-w-xl text-lg text-[color:var(--welcome-ink-muted)]"
+                        class="max-w-xl text-lg text-[color:var(--brand-ink-muted)]"
                     >
                         {{ $t('reservations.public.hero.description_prefix') }}
                         <span
-                            class="font-semibold text-[color:var(--welcome-ink-strong)]"
+                            class="font-semibold text-[color:var(--brand-ink-strong)]"
                         >
                             {{ props.availableTables }}
                         </span>
@@ -113,7 +113,7 @@ const clearIntent = () => {
                 </div>
 
                 <div
-                    class="rounded-2xl border border-[color:var(--welcome-border-warm)] bg-white/80 px-4 py-3 text-sm text-[color:var(--welcome-ink-warm)]"
+                    class="rounded-2xl border border-[color:var(--brand-border-warm)] bg-white/80 px-4 py-3 text-sm text-[color:var(--brand-ink-warm)]"
                 >
                     {{
                         $t('reservations.public.hero.notice', {
@@ -125,17 +125,17 @@ const clearIntent = () => {
             </section>
 
             <section class="lg:w-6/12">
-                <div class="welcome-card relative">
+                <div class="brand-card relative">
                     <div class="space-y-6">
                         <div>
-                            <p class="welcome-kicker">
+                            <p class="brand-kicker">
                                 {{
                                     hasIntent
                                         ? $t('reservations.public.auth.kicker')
                                         : $t('reservations.public.form.kicker')
                                 }}
                             </p>
-                            <h2 class="welcome-title">
+                            <h2 class="brand-title">
                                 {{
                                     hasIntent
                                         ? $t('reservations.public.auth.title')
@@ -143,7 +143,7 @@ const clearIntent = () => {
                                 }}
                             </h2>
                             <p
-                                class="mt-2 text-sm text-[color:var(--welcome-ink-muted)]"
+                                class="mt-2 text-sm text-[color:var(--brand-ink-muted)]"
                             >
                                 {{
                                     hasIntent
@@ -159,7 +159,7 @@ const clearIntent = () => {
 
                         <div
                             v-if="isFull"
-                            class="rounded-2xl border border-[color:var(--welcome-border-warm)] bg-white/80 px-4 py-3 text-sm text-[color:var(--welcome-ink-warm)]"
+                            class="rounded-2xl border border-[color:var(--brand-border-warm)] bg-white/80 px-4 py-3 text-sm text-[color:var(--brand-ink-warm)]"
                         >
                             {{ $t('welcome.full_notice') }}
                         </div>
@@ -186,13 +186,13 @@ const clearIntent = () => {
                             <div class="grid gap-3 sm:grid-cols-2">
                                 <Link
                                     :href="login()"
-                                    class="welcome-link welcome-link-lg justify-center text-center"
+                                    class="brand-link brand-link-lg justify-center text-center"
                                 >
                                     {{ $t('reservations.public.auth.login') }}
                                 </Link>
                                 <Link
                                     :href="register()"
-                                    class="welcome-button justify-center text-center"
+                                    class="brand-button justify-center text-center"
                                 >
                                     {{
                                         $t('reservations.public.auth.register')
@@ -202,7 +202,7 @@ const clearIntent = () => {
 
                             <button
                                 type="button"
-                                class="welcome-link text-sm"
+                                class="brand-link text-sm"
                                 @click="clearIntent"
                             >
                                 {{ $t('reservations.public.auth.back') }}

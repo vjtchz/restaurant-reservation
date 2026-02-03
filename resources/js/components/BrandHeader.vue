@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
-import { login, register } from '@/routes';
+import { home, login, register } from '@/routes';
 import { index as reservationsIndex } from '@/routes/reservations';
 
 const page = usePage();
@@ -23,23 +23,25 @@ const user = computed(() => page.props.auth?.user ?? null);
     <header
         class="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 pt-8"
     >
-        <div class="welcome-kicker">{{ $t('welcome.brand') }}</div>
+        <Link :href="home()" class="brand-kicker">
+            {{ $t('welcome.brand') }}
+        </Link>
         <div class="flex items-center gap-3">
             <LocaleSwitcher />
-            <Link v-if="!isAuthenticated" :href="login()" class="welcome-link">
+            <Link v-if="!isAuthenticated" :href="login()" class="brand-link">
                 {{ $t('welcome.nav.login') }}
             </Link>
             <Link
                 v-if="!isAuthenticated"
                 :href="register()"
-                class="welcome-button px-4 py-2 text-sm shadow-none hover:translate-y-0"
+                class="brand-button px-4 py-2 text-sm shadow-none hover:translate-y-0"
             >
                 {{ $t('welcome.nav.register') }}
             </Link>
             <Link
                 v-if="isAuthenticated"
                 :href="reservationsIndex()"
-                class="welcome-link"
+                class="brand-link"
             >
                 {{ $t('welcome.nav.reservations') }}
             </Link>
@@ -47,7 +49,7 @@ const user = computed(() => page.props.auth?.user ?? null);
                 <DropdownMenuTrigger :as-child="true">
                     <button
                         type="button"
-                        class="welcome-link p-1"
+                        class="brand-link p-1"
                         aria-label="User menu"
                     >
                         <Avatar class="h-8 w-8 overflow-hidden rounded-full">
@@ -57,7 +59,7 @@ const user = computed(() => page.props.auth?.user ?? null);
                                 :alt="user.name"
                             />
                             <AvatarFallback
-                                class="rounded-full bg-white text-sm font-semibold text-[color:var(--welcome-ink)]"
+                                class="rounded-full bg-white text-sm font-semibold text-[color:var(--brand-ink)]"
                             >
                                 {{ getInitials(user.name) }}
                             </AvatarFallback>

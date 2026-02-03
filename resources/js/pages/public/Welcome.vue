@@ -42,26 +42,26 @@ const goToReservation = () => {
             class="relative mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-14 lg:flex-row lg:items-center lg:py-24"
         >
             <section class="space-y-6 lg:w-7/12">
-                <div class="welcome-pill">
-                    <span class="welcome-dot"></span>
+                <div class="brand-pill">
+                    <span class="brand-dot"></span>
                     {{ $t('welcome.hero.pill') }}
                 </div>
 
                 <div class="space-y-4">
-                    <p class="welcome-kicker tracking-[0.28em]">
+                    <p class="brand-kicker tracking-[0.28em]">
                         {{ $t('welcome.hero.kicker') }}
                     </p>
                     <h1
-                        class="text-4xl leading-tight font-[var(--welcome-font-serif)] text-[color:var(--welcome-ink-strong)] sm:text-5xl lg:text-6xl"
+                        class="text-4xl leading-tight font-[var(--brand-font-serif)] text-[color:var(--brand-ink-strong)] sm:text-5xl lg:text-6xl"
                     >
                         {{ $t('welcome.hero.title') }}
                     </h1>
                     <p
-                        class="max-w-xl text-lg text-[color:var(--welcome-ink-muted)]"
+                        class="max-w-xl text-lg text-[color:var(--brand-ink-muted)]"
                     >
                         {{ $t('welcome.hero.description_prefix') }}
                         <span
-                            class="font-semibold text-[color:var(--welcome-ink-strong)]"
+                            class="font-semibold text-[color:var(--brand-ink-strong)]"
                             >{{ props.availableTables }}</span
                         >.
                         {{ $t('welcome.hero.description_suffix') }}
@@ -71,7 +71,7 @@ const goToReservation = () => {
                 <div class="flex flex-wrap gap-4">
                     <button
                         type="button"
-                        class="welcome-button group"
+                        class="brand-button group"
                         :disabled="isFull"
                         @click="goToReservation"
                     >
@@ -81,57 +81,57 @@ const goToReservation = () => {
                             >→</span
                         >
                     </button>
-                    <a href="#menu" class="welcome-link welcome-link-lg">
+                    <a href="#menu" class="brand-link brand-link-lg">
                         {{ $t('welcome.actions.view_menu') }}
                     </a>
                 </div>
 
                 <p
                     v-if="isFull"
-                    class="rounded-2xl border border-[color:var(--welcome-border-warm)] bg-white/80 px-4 py-3 text-sm text-[color:var(--welcome-ink-warm)]"
+                    class="rounded-2xl border border-[color:var(--brand-border-warm)] bg-white/80 px-4 py-3 text-sm text-[color:var(--brand-ink-warm)]"
                 >
                     {{ $t('welcome.full_notice') }}
                 </p>
             </section>
 
             <section class="lg:w-5/12">
-                <div class="welcome-card relative">
+                <div class="brand-card relative">
                     <div class="space-y-5">
                         <div>
-                            <p class="welcome-kicker">
+                            <p class="brand-kicker">
                                 {{ $t('welcome.availability.kicker') }}
                             </p>
-                            <h2 class="welcome-title">
+                            <h2 class="brand-title">
                                 {{ $t('welcome.availability.title') }}
                             </h2>
                         </div>
 
-                        <div class="welcome-card-soft">
+                        <div class="brand-card-soft">
                             <p
-                                class="text-sm text-[color:var(--welcome-ink-soft)]"
+                                class="text-sm text-[color:var(--brand-ink-soft)]"
                             >
                                 {{ $t('welcome.availability.count_label') }}
                             </p>
                             <p
-                                class="text-3xl font-semibold text-[color:var(--welcome-ink)]"
+                                class="text-3xl font-semibold text-[color:var(--brand-ink)]"
                             >
                                 {{ props.availableTables }}
                             </p>
                             <p
-                                class="mt-2 text-xs text-[color:var(--welcome-ink-subtle)]"
+                                class="mt-2 text-xs text-[color:var(--brand-ink-subtle)]"
                             >
                                 {{ $t('welcome.availability.note') }}
                             </p>
                         </div>
 
                         <div
-                            class="grid gap-4 text-sm text-[color:var(--welcome-ink-muted)]"
+                            class="grid gap-4 text-sm text-[color:var(--brand-ink-muted)]"
                         >
                             <div class="flex items-start gap-3">
-                                <span class="welcome-dot mt-1"></span>
+                                <span class="brand-dot mt-1"></span>
                                 <div>
                                     <p
-                                        class="font-semibold text-[color:var(--welcome-ink-strong)]"
+                                        class="font-semibold text-[color:var(--brand-ink-strong)]"
                                     >
                                         {{ $t('welcome.details.hours_label') }}
                                     </p>
@@ -146,10 +146,10 @@ const goToReservation = () => {
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="welcome-dot mt-1"></span>
+                                <span class="brand-dot mt-1"></span>
                                 <div>
                                     <p
-                                        class="font-semibold text-[color:var(--welcome-ink-strong)]"
+                                        class="font-semibold text-[color:var(--brand-ink-strong)]"
                                     >
                                         {{
                                             $t('welcome.details.address_label')
@@ -163,10 +163,10 @@ const goToReservation = () => {
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="welcome-dot mt-1"></span>
+                                <span class="brand-dot mt-1"></span>
                                 <div>
                                     <p
-                                        class="font-semibold text-[color:var(--welcome-ink-strong)]"
+                                        class="font-semibold text-[color:var(--brand-ink-strong)]"
                                     >
                                         {{ $t('welcome.details.fast_title') }}
                                     </p>
@@ -186,25 +186,25 @@ const goToReservation = () => {
         </main>
 
         <section id="menu" class="relative mx-auto w-full max-w-6xl px-6 pb-16">
-            <div class="welcome-card-muted">
+            <div class="brand-card-muted">
                 <div
                     class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
                 >
                     <div>
-                        <p class="welcome-kicker">
+                        <p class="brand-kicker">
                             {{ $t('welcome.menu.kicker') }}
                         </p>
-                        <h3 class="welcome-title">
+                        <h3 class="brand-title">
                             {{ $t('welcome.menu.title') }}
                         </h3>
                         <p
-                            class="mt-2 max-w-2xl text-sm text-[color:var(--welcome-ink-soft)]"
+                            class="mt-2 max-w-2xl text-sm text-[color:var(--brand-ink-soft)]"
                         >
                             {{ $t('welcome.menu.description') }}
                         </p>
                     </div>
                     <div
-                        class="flex items-center gap-3 text-sm text-[color:var(--welcome-ink-warm)]"
+                        class="flex items-center gap-3 text-sm text-[color:var(--brand-ink-warm)]"
                     >
                         <span
                             class="inline-flex items-center rounded-full bg-white px-3 py-1 shadow-sm"

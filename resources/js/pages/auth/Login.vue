@@ -93,7 +93,7 @@ defineProps<{
 
                 <Button
                     type="submit"
-                    class="welcome-button mt-4 w-full justify-center"
+                    class="brand-button mt-4 w-full justify-center"
                     :tabindex="4"
                     :disabled="processing"
                     data-test="login-button"
