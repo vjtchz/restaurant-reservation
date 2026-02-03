@@ -87,7 +87,7 @@ import { store } from '@/routes/register';
 
                 <Button
                     type="submit"
-                    class="mt-2 w-full"
+                    class="welcome-button mt-2 w-full justify-center"
                     tabindex="5"
                     :disabled="processing"
                     data-test="register-user-button"
